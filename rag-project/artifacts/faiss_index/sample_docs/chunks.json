@@ -1,0 +1,93 @@
+[
+  {
+    "chunk_id": "04616a2a-1084-497d-9611-c1fb72c142c7",
+    "text": "Acme Analytics employee handbook Employees may work remotely up to three days per week with manager approval. Security training is mandatory for every new hire and must be completed within the first 14 days",
+    "metadata": {
+      "source": "C:\\Users\\91945\\OneDrive\\Documents\\New project\\data\\sample\\company_handbook.txt",
+      "file_name": "company_handbook.txt",
+      "file_type": "txt",
+      "cleaned": true,
+      "chunk_index": 0
+    }
+  },
+  {
+    "chunk_id": "48310b95-c288-4e16-a245-2da656e06a27",
+    "text": "st be completed within the first 14 days Expense reimbursement for approved home office equipment is capped at 500 USD per calendar year. Customer data must never be shared outside approved systems",
+    "metadata": {
+      "source": "C:\\Users\\91945\\OneDrive\\Documents\\New project\\data\\sample\\company_handbook.txt",
+      "file_name": "company_handbook.txt",
+      "file_type": "txt",
+      "cleaned": true,
+      "chunk_index": 1
+    }
+  },
+  {
+    "chunk_id": "b55950cb-6bcc-44d8-b018-a91b10dd5d79",
+    "text": "never be shared outside approved systems Incidents involving customer data must be reported to the security team within one hour of discovery.",
+    "metadata": {
+      "source": "C:\\Users\\91945\\OneDrive\\Documents\\New project\\data\\sample\\company_handbook.txt",
+      "file_name": "company_handbook.txt",
+      "file_type": "txt",
+      "cleaned": true,
+      "chunk_index": 2
+    }
+  },
+  {
+    "chunk_id": "66e61968-61f6-4d46-8e54-ae2052760691",
+    "text": "plan: Starter | monthly_price_usd: 49 | users_included: 5 | notes: Email support and basic dashboards",
+    "metadata": {
+      "source": "C:\\Users\\91945\\OneDrive\\Documents\\New project\\data\\sample\\pricing.csv",
+      "file_name": "pricing.csv",
+      "file_type": "csv",
+      "row_number": 1,
+      "cleaned": true,
+      "chunk_index": 0
+    }
+  },
+  {
+    "chunk_id": "85394452-76ec-4a1c-90b6-916635db55f4",
+    "text": "plan: Pro | monthly_price_usd: 199 | users_included: 25 | notes: Adds anomaly alerts and scheduled reports",
+    "metadata": {
+      "source": "C:\\Users\\91945\\OneDrive\\Documents\\New project\\data\\sample\\pricing.csv",
+      "file_name": "pricing.csv",
+      "file_type": "csv",
+      "row_number": 2,
+      "cleaned": true,
+      "chunk_index": 0
+    }
+  },
+  {
+    "chunk_id": "b8ae30a9-5add-471b-89bc-a3130a844017",
+    "text": "plan: Enterprise | monthly_price_usd: 999 | users_included: 100 | notes: Includes SSO audit logs and dedicated support",
+    "metadata": {
+      "source": "C:\\Users\\91945\\OneDrive\\Documents\\New project\\data\\sample\\pricing.csv",
+      "file_name": "pricing.csv",
+      "file_type": "csv",
+      "row_number": 3,
+      "cleaned": true,
+      "chunk_index": 0
+    }
+  },
+  {
+    "chunk_id": "95bd5758-3bb3-4056-9546-24880c97e7dc",
+    "text": "Acme Analytics product FAQ The Insights Pro plan includes dashboard sharing, scheduled reports, and anomaly alerts. The Enterprise plan includes SSO, audit logs, custom retention policies, and a dedicated support channel",
+    "metadata": {
+      "source": "C:\\Users\\91945\\OneDrive\\Documents\\New project\\data\\sample\\product_faq.txt",
+      "file_name": "product_faq.txt",
+      "file_type": "txt",
+      "cleaned": true,
+      "chunk_index": 0
+    }
+  },
+  {
+    "chunk_id": "16366b5d-c0bb-45e5-9e28-543aa2c9071e",
+    "text": "olicies, and a dedicated support channel Billing is monthly by default, but annual contracts are available for Enterprise customers. The default retention period for standard plans is 90 days unless a custom retention policy is purchased.",
+    "metadata": {
+      "source": "C:\\Users\\91945\\OneDrive\\Documents\\New project\\data\\sample\\product_faq.txt",
+      "file_name": "product_faq.txt",
+      "file_type": "txt",
+      "cleaned": true,
+      "chunk_index": 1
+    }
+  }
+]

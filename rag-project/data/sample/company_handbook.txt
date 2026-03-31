@@ -1,0 +1,5 @@
+Acme Analytics employee handbook
+
+Employees may work remotely up to three days per week with manager approval. Security training is mandatory for every new hire and must be completed within the first 14 days. Expense reimbursement for approved home office equipment is capped at 500 USD per calendar year.
+
+Customer data must never be shared outside approved systems. Incidents involving customer data must be reported to the security team within one hour of discovery.

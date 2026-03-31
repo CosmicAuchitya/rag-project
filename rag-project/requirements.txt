@@ -1,0 +1,11 @@
+numpy>=1.26.0
+faiss-cpu>=1.8.0
+openai>=1.30.0
+pypdf>=4.2.0
+sentence-transformers>=2.7.0
+fastapi>=0.110.0
+uvicorn>=0.29.0
+imageio-ffmpeg>=0.5.1
+sentencepiece>=0.2.0
+streamlit>=1.37.0
+python-dotenv>=1.0.1

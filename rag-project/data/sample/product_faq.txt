@@ -1,0 +1,5 @@
+Acme Analytics product FAQ
+
+The Insights Pro plan includes dashboard sharing, scheduled reports, and anomaly alerts. The Enterprise plan includes SSO, audit logs, custom retention policies, and a dedicated support channel.
+
+Billing is monthly by default, but annual contracts are available for Enterprise customers. The default retention period for standard plans is 90 days unless a custom retention policy is purchased.

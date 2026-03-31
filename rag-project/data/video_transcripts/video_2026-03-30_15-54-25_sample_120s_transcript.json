@@ -1,0 +1,154 @@
+{
+  "text": "Okay so you want to know how to say a word in English. So you type it in the online dictionary and voila there it is there's the word in English but how do you pronounce it? What can you do? You can look at the phonetic transcription, but there's a problem. These have symbols which are scary, that you don't know what they mean at. Well, listen, I'm gonna make the international phonetic alphabet really, really easy for you. And at the end of this video I've got a little test for you and I'm pretty sure you are going to be able to look at the phonetic transcription of words and know exactly how to pronounce them. So let's go! Now I'm Greg from EnglishWithGreg.com. On this channel I teach advanced British English pronunciation, grammar and vocabulary to help you master English conversation conversation and this topic was one that was requested by quite a few of my subscribers. Basic phonetics. So, let's go. There are 44 sounds in English, that means there are 44 phonetic symbols that we need to know if we want to be able to look at a phonetic transcription of a word and know how to pronounce that word. Okay, 44 sounds a lot. Yeah, well, don't worry, because 24 of those are consonants and for 16 of the consonants the phonetic transcription is exactly as you would expect it to be. It is basically the letter that it usually represents in written English. For example, the T sound is like that. The D sound is like that. The G sound in Greg is like that. The Ruh is like that. The F is like that. The B is like that. So we don't need to worry about that. If you read a phonetic transcription, you can easily understand 16 consonants without me teaching you anything. of the 24th.",
+  "chunks": [
+    {
+      "timestamp": [
+        0.0,
+        6.0
+      ],
+      "text": " Okay so you want to know how to say a word in English. So you type it in the online dictionary"
+    },
+    {
+      "timestamp": [
+        6.0,
+        13.84
+      ],
+      "text": " and voila there it is there's the word in English but how do you pronounce it? What can you do?"
+    },
+    {
+      "timestamp": [
+        13.84,
+        17.13
+      ],
+      "text": " You can look at the phonetic transcription,"
+    },
+    {
+      "timestamp": [
+        17.13,
+        19.01
+      ],
+      "text": " but there's a problem."
+    },
+    {
+      "timestamp": [
+        19.01,
+        21.49
+      ],
+      "text": " These have symbols which are scary,"
+    },
+    {
+      "timestamp": [
+        21.49,
+        23.89
+      ],
+      "text": " that you don't know what they mean at."
+    },
+    {
+      "timestamp": [
+        23.89,
+        26.33
+      ],
+      "text": " Well, listen, I'm gonna make the international"
+    },
+    {
+      "timestamp": [
+        26.33,
+        31.91
+      ],
+      "text": " phonetic alphabet really, really easy for you. And at the end of this video I've got a"
+    },
+    {
+      "timestamp": [
+        31.91,
+        36.71
+      ],
+      "text": " little test for you and I'm pretty sure you are going to be able to look at the"
+    },
+    {
+      "timestamp": [
+        36.71,
+        59.73
+      ],
+      "text": " phonetic transcription of words and know exactly how to pronounce them. So let's go! Now I'm Greg from EnglishWithGreg.com. On this channel I teach advanced British English pronunciation, grammar and vocabulary to help you master English conversation conversation and this topic was one that was requested"
+    },
+    {
+      "timestamp": [
+        59.73,
+        69.33
+      ],
+      "text": " by quite a few of my subscribers. Basic phonetics. So, let's go. There are 44 sounds in English,"
+    },
+    {
+      "timestamp": [
+        69.33,
+        73.43
+      ],
+      "text": " that means there are 44 phonetic symbols that we need to know"
+    },
+    {
+      "timestamp": [
+        73.43,
+        76.39
+      ],
+      "text": " if we want to be able to look at a phonetic transcription"
+    },
+    {
+      "timestamp": [
+        76.39,
+        79.67
+      ],
+      "text": " of a word and know how to pronounce that word."
+    },
+    {
+      "timestamp": [
+        79.67,
+        82.07
+      ],
+      "text": " Okay, 44 sounds a lot."
+    },
+    {
+      "timestamp": [
+        82.07,
+        100.77
+      ],
+      "text": " Yeah, well, don't worry, because 24 of those are consonants and for 16 of the consonants the phonetic transcription is exactly as you would expect it to be. It is basically the letter that it usually represents in written English."
+    },
+    {
+      "timestamp": [
+        100.77,
+        106.45
+      ],
+      "text": " For example, the T sound is like that. The D sound is like that. The G sound in Greg is like that."
+    },
+    {
+      "timestamp": [
+        106.45,
+        112.23
+      ],
+      "text": " The Ruh is like that. The F is like that. The B is like that. So we don't need to worry about that."
+    },
+    {
+      "timestamp": [
+        112.23,
+        117.99
+      ],
+      "text": " If you read a phonetic transcription, you can easily understand 16 consonants without me teaching"
+    },
+    {
+      "timestamp": [
+        117.99,
+        118.99
+      ],
+      "text": " you anything."
+    },
+    {
+      "timestamp": [
+        118.99,
+        119.99
+      ],
+      "text": " of the 24th."
+    }
+  ],
+  "model_name": "openai/whisper-tiny.en",
+  "sampling_rate": 16000
+}

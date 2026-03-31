@@ -1,0 +1,4 @@
+plan,monthly_price_usd,users_included,notes
+Starter,49,5,Email support and basic dashboards
+Pro,199,25,Adds anomaly alerts and scheduled reports
+Enterprise,999,100,Includes SSO audit logs and dedicated support
