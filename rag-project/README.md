@@ -2,6 +2,10 @@
 
 This project provides a modular Retrieval-Augmented Generation (RAG) pipeline designed for notebook workflows and production-style reuse.
 
+## Resume / Interview Summary
+
+This project demonstrates an end-to-end RAG system that supports document ingestion, video transcription, semantic retrieval with FAISS, and grounded answer generation using both local models and OpenAI-compatible APIs. It is designed as a modular production-style pipeline with configurable embeddings, configurable LLM providers, source-aware retrieval, and optional Streamlit and API interfaces.
+
 ## Architecture
 
 The system follows this pipeline:
