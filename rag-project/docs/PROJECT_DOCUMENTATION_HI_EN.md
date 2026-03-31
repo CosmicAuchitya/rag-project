@@ -1,382 +1,204 @@
-# Local Video RAG Project Documentation
+# Local Video RAG - Detailed Project Documentation
 
-## 1. Project Summary | Project ka Summary
+## 1. Executive Summary
 
-This project builds a **production-style local RAG system** that can take documents or a video transcript, convert the content into embeddings, store it in FAISS, retrieve relevant chunks, and answer questions from the retrieved context.
+This project is a modular Retrieval-Augmented Generation system designed to answer questions from both traditional documents and video transcripts. It combines preprocessing, embeddings, FAISS-based retrieval, and configurable answer generation into one reusable pipeline.
 
-Ye project ek **production-style local RAG system** banata hai jo documents ya video transcript ko process karta hai, embeddings banata hai, FAISS me store karta hai, relevant chunks retrieve karta hai, aur unhi chunks ke context se answer deta hai.
+Hindi note:
+Ye project ek structured RAG system hai jo documents aur video transcript dono par question answering kar sakta hai.
 
----
+## 2. Problem Statement
 
-## 2. Main Problem | Asli Problem Kya Thi
+The original goal was not only to transcribe a video, but to build a system that could:
 
-The user did not want to depend on any paid API or cloud service.
+- understand source material,
+- retrieve the most relevant information,
+- answer user questions from grounded context,
+- support both local execution and API-backed execution.
 
-User kisi bhi paid API ya cloud service par depend nahi karna chahte the.
+This matters because raw transcripts or large documents are difficult to use directly in a reliable question-answering flow.
 
-That created a few practical problems:
+Hindi note:
+Sirf transcript banana enough nahi tha. Humein aisa system chahiye tha jo relevant information dhoondh kar context-based answer de.
 
-Isse kuch practical problems aaye:
+## 3. Why RAG Was The Right Approach
 
-1. We needed a **fully local answer generation path**.
-2. We needed **local transcription** for the MP4 video.
-3. The original video is around **16 minutes long**, so direct full processing could be slow on CPU.
-4. The machine did not have `ffmpeg` installed globally.
-5. Local models can be heavy, so we needed a balanced choice between **speed, memory, and quality**.
+RAG was chosen because it solves an important limitation of direct prompting: long documents and long transcripts do not fit cleanly into a single prompt, and even when they do, answer quality can become inconsistent.
 
----
+The RAG pipeline improves this by:
 
-## 3. Why RAG Here | Yahan RAG Kyun Use Kiya
+- splitting content into meaningful chunks,
+- embedding those chunks into vector space,
+- retrieving only the most relevant chunks for a question,
+- generating an answer from retrieved evidence.
 
-The goal was not just transcription.
+Hindi note:
+RAG ne is problem ko solve kiya kyunki poora transcript model ko dene ke bajay sirf relevant chunks use kiye gaye.
 
-Goal sirf transcription karna nahi tha.
+## 4. System Design
 
-We wanted a system that could:
+The final system follows this flow:
 
-Hum aisa system chahte the jo:
+1. Load files or transcripts
+2. Clean the text
+3. Split content into chunks
+4. Generate embeddings
+5. Store vectors in FAISS
+6. Retrieve top-k relevant chunks
+7. Generate a grounded answer
+8. Inspect or evaluate results
 
-1. understand the source content,
-2. search semantically,
-3. answer user questions from relevant context,
-4. track the source of the answer.
+For videos, the workflow adds:
 
-Video ya long transcript ko directly model me daalne se context limit aur quality issues aa sakte hain. RAG approach me transcript ko chunks me tod kar indexed form me store kiya jata hai, jisse targeted retrieval hota hai aur answer zyada grounded hota hai.
+1. MP4 sample extraction
+2. Audio conversion
+3. Whisper transcription
+4. Transcript persistence as TXT and JSON
 
----
+## 5. Key Engineering Choices
 
-## 4. Final Architecture | Final Architecture Kya Hai
+### 5.1 Modular file structure
 
-Pipeline:
+The project was intentionally split into focused modules such as `loaders.py`, `embeddings.py`, `vector_store.py`, `generator.py`, and `transcription.py`.
 
-1. Data Loading
-2. Data Cleaning
-3. Chunking
-4. Embedding
-5. Vector Storage in FAISS
-6. Semantic Retrieval
-7. LLM-based Answer Generation
-8. Evaluation / Inspection
+Why this was useful:
 
-Video workflow:
+- each file has one clear responsibility,
+- debugging becomes easier,
+- local and API-backed modes can coexist cleanly,
+- future changes stay isolated instead of breaking the full pipeline.
 
-1. MP4 video input
-2. Sample extraction
-3. WAV audio conversion
-4. Whisper transcription
-5. Transcript saved as text and JSON
-6. Transcript indexed into FAISS
-7. User query answered with local RAG
+Hindi note:
+Ye structure interview aur maintenance dono ke liye strong hai, kyunki har part alag file me controlled way me rakha gaya hai.
 
----
+### 5.2 FAISS for retrieval
 
-## 5. Project Structure | Project Structure Samajhna
+FAISS was chosen because it is lightweight, fast, and practical for local semantic search.
 
-- [rag_system/config.py](C:\Users\91945\OneDrive\Documents\New project\rag_system\config.py)
-  Central config for pipeline settings.
+### 5.3 Sentence Transformers for local embeddings
 
-- [rag_system/loaders.py](C:\Users\91945\OneDrive\Documents\New project\rag_system\loaders.py)
-  Loads TXT, CSV, and PDF files.
+`sentence-transformers/all-MiniLM-L6-v2` was selected because it is fast and efficient while still being strong enough for semantic retrieval.
 
-- [rag_system/preprocess.py](C:\Users\91945\OneDrive\Documents\New project\rag_system\preprocess.py)
-  Cleans and normalizes text.
+### 5.4 Whisper for local transcription
 
-- [rag_system/chunking.py](C:\Users\91945\OneDrive\Documents\New project\rag_system\chunking.py)
-  Splits documents into overlapping chunks.
-
-- [rag_system/embeddings.py](C:\Users\91945\OneDrive\Documents\New project\rag_system\embeddings.py)
-  Generates embeddings and caches them in SQLite.
-
-- [rag_system/vector_store.py](C:\Users\91945\OneDrive\Documents\New project\rag_system\vector_store.py)
-  Builds and saves FAISS indexes.
-
-- [rag_system/retriever.py](C:\Users\91945\OneDrive\Documents\New project\rag_system\retriever.py)
-  Retrieves top-k relevant chunks.
-
-- [rag_system/generator.py](C:\Users\91945\OneDrive\Documents\New project\rag_system\generator.py)
-  Generates answers using extractive mode, OpenAI-compatible mode, or local Hugging Face mode.
-
-- [rag_system/transcription.py](C:\Users\91945\OneDrive\Documents\New project\rag_system\transcription.py)
-  Handles local video sample extraction and Whisper transcription.
-
-- [rag_system/video_rag.py](C:\Users\91945\OneDrive\Documents\New project\rag_system\video_rag.py)
-  Shared reusable local video-to-RAG workflow.
-
-- [run_local_video_rag.py](C:\Users\91945\OneDrive\Documents\New project\run_local_video_rag.py)
-  CLI runner for local video RAG.
-
-- [app/streamlit_app.py](C:\Users\91945\OneDrive\Documents\New project\app\streamlit_app.py)
-  Streamlit UI for the same local workflow.
-
----
-
-## 6. Problems We Faced | Humne Kaun Kaun Si Problems Face Ki
-
-### Problem 1: No API usage allowed
-The user explicitly wanted a local setup.
-
-Isliye OpenAI ya kisi hosted API par dependency hataani padi.
-
-### Problem 2: No ffmpeg installed globally
-Video ko audio me convert karne ke liye ffmpeg chahiye tha.
-
-System me ffmpeg available nahi tha, isliye `imageio-ffmpeg` use kiya gaya jo Python ke through bundled ffmpeg executable deta hai.
-
-### Problem 3: Long video processing time
-16-minute video ko directly process karna CPU par slow ho sakta tha.
-
-Isliye pehle **60-second sample** par workflow verify kiya gaya.
-
-### Problem 4: Local models can be heavy
-Bade local models CPU RAM aur time dono consume karte hain.
-
-Isliye humne lighter but useful models choose kiye.
-
-### Problem 5: Library/runtime issues
-Environment me dependency visibility aur model task compatibility jaisi issues aaye.
-
-Humne generator ko more stable local seq2seq loading path par shift kiya.
-
----
-
-## 7. Choices We Made | Humne Kaun Se Choices Kiye
-
-### Choice 1: 60-second sample first
-Why:
-
-- Faster validation
-- Lower memory use
-- Easier debugging
-
-Hindi:
-Pehle 1-minute sample lena safe tha kyunki isse poora pipeline jaldi test ho gaya aur full 16-minute run se pehle issues pakad liye.
-
-### Choice 2: `openai/whisper-tiny.en` for transcription
-Why:
-
-- Small and lightweight
-- Good for quick local testing
-- Faster than larger Whisper variants
+`openai/whisper-tiny.en` was used for the first working version because it keeps runtime manageable for CPU-based execution.
 
 Tradeoff:
-Accuracy `base` ya `small` model se thodi kam ho sakti hai.
+larger Whisper models may produce better transcription quality, but require more time and resources.
 
-### Choice 3: `sentence-transformers/all-MiniLM-L6-v2` for embeddings
-Why:
+### 5.5 FLAN-T5 small for local answering
 
-- Fast
-- Memory efficient
-- Strong enough for semantic retrieval
-
-### Choice 4: FAISS as vector database
-Why:
-
-- Fast similarity search
-- Lightweight
-- Good local deployment option
-
-### Choice 5: `google/flan-t5-small` as local answer model
-Why:
-
-- Fully local
-- Small enough for CPU use
-- Easier to run than larger instruction models
+`google/flan-t5-small` was chosen as a practical local answer model to keep the project runnable without requiring a large GPU setup.
 
 Tradeoff:
-Answer quality useful hai, but bahut advanced ya highly detailed nahi hogi.
+the model is usable, but not as strong as larger hosted or quantized instruct models.
 
-### Choice 6: Similarity filtering
-Why:
+### 5.6 OpenAI-compatible mode
 
-- Low-quality irrelevant chunks ko avoid karna
-- Better grounding
+The project was extended to support OpenAI-compatible API usage so that the same codebase can be demonstrated in both:
 
-### Choice 7: Embedding cache in SQLite
-Why:
+- no-cost local mode,
+- higher-quality API-backed mode.
 
-- Repeated runs faster ho jate hain
-- Same text ke embeddings dubara compute nahi karne padte
+This is important for interviews because it shows engineering flexibility rather than hard-coding a single path.
 
----
+## 6. Challenges Faced
 
-## 8. What We Did Step By Step | Humne Step By Step Kya Kiya
+### Challenge 1: No paid API requirement
 
-1. Existing modular RAG codebase banaya.
-2. Loaders, preprocess, chunking, embeddings, FAISS, retrieval, generation modules add kiye.
-3. Local generator support add kiya.
-4. Video processing ke liye audio extraction utility banayi.
-5. Whisper transcription module add kiya.
-6. Transcript ko TXT and JSON artifacts me save kiya.
-7. Transcript par FAISS index build kiya.
-8. Local question answering test ki.
-9. Streamlit UI add kiya.
-10. Documentation add ki.
+The initial constraint was to avoid paid APIs, which meant the entire workflow had to run locally.
 
----
+### Challenge 2: No global ffmpeg
 
-## 9. Output Artifacts | Kaunse Files Generate Hui
+The machine did not have a globally installed ffmpeg binary. This was handled with `imageio-ffmpeg`, which provides a bundled executable.
 
-- Sample video clip
-- Sample WAV audio
-- Transcript TXT
-- Transcript JSON metadata
-- FAISS index
-- Chunk metadata JSON
+### Challenge 3: Video duration
 
-Important generated paths:
+The source video was long enough that full processing on CPU could be slow. A 60-second sample workflow was created first to validate the pipeline safely.
 
-- [artifacts/video_processing](C:\Users\91945\OneDrive\Documents\New project\artifacts\video_processing)
-- [data/video_transcripts](C:\Users\91945\OneDrive\Documents\New project\data\video_transcripts)
-- [artifacts/faiss_index](C:\Users\91945\OneDrive\Documents\New project\artifacts\faiss_index)
+### Challenge 4: Model-size tradeoffs
 
----
+Local models are often limited by CPU speed, RAM, and disk usage. Smaller models were selected first to ensure the project could actually run.
 
-## 10. Current Limitations | Abhi System Ki Limitations
+### Challenge 5: Runtime compatibility
 
-1. The local answer model is small, so answers can be short or imperfect.
-2. Whisper tiny model is fast but not the most accurate.
-3. Full 16-minute video processing will take more time than the 60-second sample.
-4. CPU-only setup will be slower than GPU.
-5. Better summarization may need a stronger local model.
+Some library and provider combinations required extra handling, especially around local generation paths and environment-based configuration.
 
----
+## 7. What Was Implemented
 
-## 11. Recommended Improvements | Aage Kya Improve Kar Sakte Hain
+The project now includes:
 
-1. Use `openai/whisper-base.en` or `openai/whisper-small.en` for better transcription.
-2. Use a stronger local LLM such as a quantized instruct model via Ollama or LM Studio.
-3. Add transcript chunk timestamps inside retrieval metadata.
-4. Add batch processing for full video segments.
-5. Add conversation memory in Streamlit.
-6. Add transcript search and source preview UI.
+- document RAG for TXT, CSV, and PDF,
+- video-to-transcript processing,
+- local semantic retrieval,
+- local answer generation,
+- OpenAI-compatible answer generation,
+- CLI usage,
+- notebook usage,
+- Streamlit interface,
+- API-ready backend layer.
 
----
+## 8. Output Artifacts
 
-## 12. Can This Run On Streamlit? | Kya Ye System Streamlit Par Chal Sakta Hai
+The workflow generates and stores:
 
-Yes, absolutely.
+- sample video clips,
+- extracted WAV files,
+- transcript text files,
+- transcript metadata JSON,
+- FAISS indexes,
+- chunk metadata,
+- embedding cache files.
 
-Haan, bilkul chal sakta hai.
+Primary directories:
 
-We already added a Streamlit app:
+- `artifacts/video_processing`
+- `artifacts/faiss_index`
+- `data/video_transcripts`
 
-- [app/streamlit_app.py](C:\Users\91945\OneDrive\Documents\New project\app\streamlit_app.py)
+## 9. Streamlit Support
 
-### How Streamlit fits here | Streamlit ka role
+Yes, the system supports Streamlit through `app/streamlit_app.py`.
 
-Streamlit ek browser-based UI deta hai jahan user:
+What Streamlit provides:
 
-1. video ka naam de sakta hai,
-2. sample duration choose kar sakta hai,
-3. query enter kar sakta hai,
-4. transcript dekh sakta hai,
-5. final answer aur retrieved chunks dekh sakta hai.
+- simple browser UI,
+- easy demo flow,
+- support for local mode and API mode,
+- transcript preview,
+- retrieved-chunk visibility.
 
-### How to run Streamlit | Streamlit kaise chalana hai
-
-```powershell
-streamlit run app/streamlit_app.py
-```
-
-If `streamlit` command PATH me na ho, tab:
+Command:
 
 ```powershell
 python -m streamlit run app/streamlit_app.py
 ```
 
-### What the Streamlit app does
+Hindi note:
+Streamlit interviewer demo ke liye useful hai, kyunki bina code khole system ka end-to-end flow dikhaya ja sakta hai.
 
-1. Reads the local video from project root
-2. Extracts sample clip
-3. Transcribes locally
-4. Builds FAISS index
-5. Answers your question
-6. Shows transcript, answer, and retrieved chunks in browser
+## 10. OpenAI API Demo Support
 
-### When Streamlit is useful
+To make the project interview-friendly, an explicit API-key path was added.
 
-- Demo dene ke liye
-- Non-technical users ke liye
-- Quick experimentation ke liye
-- Manual question-answer workflow ke liye
+Where the key goes:
 
-### When CLI is better
+- copy `.env.example` to `.env`
+- fill `OPENAI_API_KEY`
+- set `USE_OPENAI=true`
 
-- Batch runs
-- Debugging
-- Automation
-- Long processing jobs
-
----
-
-## 13. Recommended Command Set | Recommended Commands
-
-### CLI run
-
-```powershell
-python run_local_video_rag.py
-```
-
-### Longer sample
-
-```powershell
-python run_local_video_rag.py --duration-seconds 300
-```
-
-### Different start offset
-
-```powershell
-python run_local_video_rag.py --start-seconds 120 --duration-seconds 180
-```
-
-### Streamlit UI
-
-```powershell
-python -m streamlit run app/streamlit_app.py
-```
-
----
-
-## 15. OpenAI API Demo Option | Interview Me API Key Kaise Dikhani Hai
-
-Yes, this project now supports an interview-friendly API-key flow too.
-
-Haan, ab is project me API key ka clear demo option bhi diya gaya hai.
-
-### Where to put the key | Key kahan daalni hai
-
-Use this file:
-
-- `.env.example`
-
-Copy it to:
-
-- `.env`
-
-Then fill this line:
+Recommended settings:
 
 ```env
 OPENAI_API_KEY=sk-your-openai-api-key-here
-```
-
-### Main switch | API mode on kaise karna hai
-
-In `.env`, set:
-
-```env
 USE_OPENAI=true
-```
-
-Recommended interview/demo values:
-
-```env
 VIDEO_EMBEDDING_PROVIDER=openai
 VIDEO_EMBEDDING_MODEL=text-embedding-3-small
 VIDEO_LLM_PROVIDER=openai
 VIDEO_LLM_MODEL=gpt-4o-mini
 ```
 
-### Which files use the API settings | Kaun si files ye settings padhti hain
+Files that read or use these settings:
 
 - `run_local_video_rag.py`
 - `notebooks/rag_step_by_step.py`
@@ -384,42 +206,39 @@ VIDEO_LLM_MODEL=gpt-4o-mini
 - `app/streamlit_app.py`
 - `rag_system/video_rag.py`
 
-### What to say in interview | Interview me kaise explain karna hai
+## 11. Recruiter / Interview Summary
 
-You can say:
+This project demonstrates:
 
-"System local mode me bhi chal sakta hai aur OpenAI API mode me bhi. API key `.env` me jaati hai, aur providers environment variables se switch hote hain. Isliye same codebase local aur hosted dono modes support karta hai."
+- applied understanding of RAG system design,
+- practical experience with vector databases,
+- configurable AI architecture,
+- local and hosted model interoperability,
+- real-world multimodal preprocessing,
+- interface support through notebooks, CLI, and Streamlit.
 
-Hindi:
+Short version for interviews:
 
-"Ye system local mode me bhi chalta hai aur API key ke saath bhi. Key `.env` file me daali jaati hai, aur provider switch env variables se hota hai. Isliye interview me main dono modes dikha sakta hoon."
+"Built a modular end-to-end RAG system for documents and video transcripts using FAISS, configurable embeddings, and both local and OpenAI-compatible generation paths, with Streamlit support for interactive demos."
 
-### Exact demo command | Seedha run kaise karna hai
+## 12. Current Limitations
 
-```powershell
-python run_local_video_rag.py
-```
+- The local answer model is intentionally small, so responses can be brief.
+- Whisper tiny is optimized for speed rather than maximum transcription quality.
+- Full-length video processing is slower on CPU.
+- The local-first setup is practical, but stronger models can improve answer quality.
 
-Ya Streamlit me:
+## 13. Recommended Improvements
 
-```powershell
-python -m streamlit run app/streamlit_app.py
-```
+- Upgrade transcription to `whisper-base` or `whisper-small`
+- Add timestamp-aware chunk metadata
+- Add conversation memory
+- Improve transcript exploration in the UI
+- Add stronger local inference options such as quantized instruct models
 
-If `.env` me `USE_OPENAI=true` aur valid `OPENAI_API_KEY` hai, to system OpenAI mode use karega.
+## 14. Final Takeaway
 
-## 14. Final Conclusion | Final Conclusion
+This is not just a script collection. It is a structured RAG project that shows clear engineering thinking, modular implementation, deployment flexibility, and interview-ready presentation.
 
-This project now supports:
-
-1. modular RAG,
-2. local video transcription,
-3. local embeddings,
-4. FAISS retrieval,
-5. local answer generation,
-6. CLI execution,
-7. Streamlit UI.
-
-Simple words me:
-
-Ab ye system bina API ke local machine par video ko samajhne aur us par question-answer karne ke liye ready hai. Streamlit par bhi chal sakta hai, aur CLI se bhi.
+Hindi note:
+Is project ka strongest point ye hai ki ye sirf kaam nahi karta, balki achhe engineering structure ke saath present bhi hota hai.

@@ -1,30 +1,55 @@
 # Production RAG System
 
-This project provides a modular Retrieval-Augmented Generation (RAG) pipeline designed for notebook workflows and production-style reuse.
+An end-to-end Retrieval-Augmented Generation system built to answer questions from documents and video transcripts using semantic search, FAISS, and configurable LLM backends.
 
-## Resume / Interview Summary
+## Project Summary
 
-This project demonstrates an end-to-end RAG system that supports document ingestion, video transcription, semantic retrieval with FAISS, and grounded answer generation using both local models and OpenAI-compatible APIs. It is designed as a modular production-style pipeline with configurable embeddings, configurable LLM providers, source-aware retrieval, and optional Streamlit and API interfaces.
+This project demonstrates a production-style RAG workflow that supports:
+
+- document ingestion for TXT, CSV, and PDF files,
+- transcript-based question answering for video content,
+- local model execution,
+- OpenAI-compatible API execution,
+- Streamlit and notebook-based interaction.
+
+For interviews, this project shows practical understanding of data pipelines, vector search, modular backend design, and configurable AI systems.
+
+## Key Features
+
+- Modular pipeline for loading, cleaning, chunking, embedding, indexing, retrieval, and generation
+- FAISS-based vector search with metadata-aware retrieval
+- Local video workflow using sample extraction, audio conversion, and Whisper transcription
+- Dual execution modes: fully local or OpenAI-compatible API mode
+- Streamlit UI, notebook workflow, and CLI entry points
+- Source-aware outputs and environment-driven configuration
 
 ## Architecture
 
-The system follows this pipeline:
+The core pipeline follows this sequence:
 
-1. Data loading
-2. Data cleaning
+1. Data Loading
+2. Data Cleaning
 3. Chunking
 4. Embedding
-5. FAISS vector storage
-6. Retrieval
-7. LLM response generation
-8. Retrieval evaluation
+5. Vector Storage in FAISS
+6. Semantic Retrieval
+7. LLM Response Generation
+8. Evaluation and inspection
 
-## Project Structure
+Video processing extends the same pipeline by adding:
+
+1. MP4 input
+2. Sample extraction
+3. WAV conversion
+4. Whisper transcription
+5. Transcript indexing
+6. RAG-based question answering
+
+## Repository Layout
 
 ```text
 rag_system/
   config.py
-  models.py
   loaders.py
   preprocess.py
   chunking.py
@@ -32,51 +57,32 @@ rag_system/
   vector_store.py
   retriever.py
   generator.py
-  evaluator.py
-  pipeline.py
+  transcription.py
+  video_rag.py
 app/
   api.py
+  streamlit_app.py
 data/
   sample/
+  video_transcripts/
+docs/
+  PROJECT_DOCUMENTATION_HI_EN.md
 notebooks/
   rag_step_by_step.py
+run_local_video_rag.py
+run_rag_cli.py
 requirements.txt
 ```
 
-## Notes
+## Running The Project
 
-- Python `3.11` or `3.12` is recommended for the smoothest FAISS compatibility.
-- The code uses lazy imports for optional dependencies such as `faiss`, `openai`, `pypdf`, and `sentence-transformers`.
-- The notebook-style script uses `# %%` cells so it can be executed step-by-step in VS Code or converted easily into a Jupyter notebook.
-- In restricted environments, you can install packages into a repo-local `vendor_pkgs` folder and the notebook, CLI, and API entry points will pick it up automatically.
+### Local mode
 
-## Quick Start
-
-1. Create and activate a Python environment.
-2. Install the dependencies in `requirements.txt`.
-3. If you want API mode, copy `.env.example` to `.env` and paste your API key in `OPENAI_API_KEY`.
-4. Run the notebook-style script in `notebooks/rag_step_by_step.py`.
-
-## Documentation
-
-- Detailed Hindi-English project documentation: `docs/PROJECT_DOCUMENTATION_HI_EN.md`
-- Interview/demo env template: `.env.example`
-
-## Local Video Workflow
-
-If you do not want to use any API, run the fully local video pipeline:
+Use the local stack when you do not want API cost:
 
 ```powershell
 python run_local_video_rag.py
 ```
-
-That workflow:
-
-1. extracts a sample clip from your MP4,
-2. transcribes it locally with Whisper,
-3. saves the transcript to `data/video_transcripts`,
-4. builds a FAISS index over the transcript,
-5. answers a question with local embeddings plus a local Hugging Face model.
 
 Useful options:
 
@@ -86,48 +92,56 @@ python run_local_video_rag.py --duration-seconds 300 --query "What is the speake
 python run_local_video_rag.py --start-seconds 60 --duration-seconds 120
 ```
 
-If you want to show API mode in an interview:
+### OpenAI-compatible API mode
 
 1. Copy `.env.example` to `.env`
-2. Put your key in `OPENAI_API_KEY=...`
+2. Fill `OPENAI_API_KEY`
 3. Set `USE_OPENAI=true`
-4. Run `python run_local_video_rag.py`
+4. Run the same command:
 
-Important interview point:
+```powershell
+python run_local_video_rag.py
+```
 
-- `.env.example` shows exactly where the key goes
-- `run_local_video_rag.py` auto-loads `.env`
-- `rag_system/video_rag.py` switches to OpenAI when `USE_OPENAI=true`
-- `notebooks/rag_step_by_step.py` also reads the same environment variables
+Recommended API-mode values:
+
+```env
+OPENAI_API_KEY=sk-your-openai-api-key-here
+USE_OPENAI=true
+VIDEO_EMBEDDING_PROVIDER=openai
+VIDEO_EMBEDDING_MODEL=text-embedding-3-small
+VIDEO_LLM_PROVIDER=openai
+VIDEO_LLM_MODEL=gpt-4o-mini
+```
 
 ## Streamlit UI
 
-Yes, this system can run on Streamlit.
-
-Run:
+Launch the browser interface with:
 
 ```powershell
 python -m streamlit run app/streamlit_app.py
 ```
 
-The Streamlit app lets you:
+The app supports:
 
-1. choose the local video,
-2. set sample duration,
-3. ask a question,
-4. view the transcript,
-5. inspect retrieved chunks and the final answer.
+- local or OpenAI-backed execution,
+- video selection and sample duration control,
+- question input,
+- transcript preview,
+- retrieved chunk inspection.
 
-## Environment Variables
+## Documentation
 
-- `EMBEDDING_PROVIDER`: `sentence_transformers`, `openai`, or `openai_compatible`
-- `EMBEDDING_MODEL`: embedding model name
-- `LLM_PROVIDER`: `extractive`, `openai`, or `openai_compatible`
-- `LLM_MODEL`: generation model name
-- `OPENAI_API_KEY`: API key for OpenAI-compatible providers
-- `OPENAI_BASE_URL`: base URL for a local OpenAI-compatible server such as LM Studio or Ollama gateways
-- `USE_OPENAI`: `true` for OpenAI mode in the video workflow
-- `VIDEO_EMBEDDING_PROVIDER`: `sentence_transformers` or `openai`
-- `VIDEO_EMBEDDING_MODEL`: video-RAG embedding model
-- `VIDEO_LLM_PROVIDER`: `huggingface_local` or `openai`
-- `VIDEO_LLM_MODEL`: video-RAG answer model
+- Detailed bilingual documentation: `docs/PROJECT_DOCUMENTATION_HI_EN.md`
+- Environment template: `.env.example`
+- Notebook walkthrough: `notebooks/rag_step_by_step.py`
+
+## Interview Value
+
+This project is useful in interviews because it demonstrates:
+
+- end-to-end RAG design rather than isolated scripts,
+- modular Python engineering,
+- local and hosted model interoperability,
+- vector search and retrieval grounding,
+- practical handling of real-world inputs such as video.
